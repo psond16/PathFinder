@@ -1,16 +1,25 @@
-# React + Vite
+# PathFinder 🎨🧭
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PathFinder is an interactive vision-to-action canvas that turns personal goals into a living piece of digital art.
 
-Currently, two official plugins are available:
+Instead of static vision boards, PathFinder helps users break dreams into meaningful steps. Each step appears as part of a black-and-white visual board that gradually transforms into color as progress is made.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Users can replace AI-generated visuals with real photos from their own journey, turning growth into a personal, evolving artwork.
 
-## React Compiler
+## Why PathFinder
+Many people struggle to stay motivated because goals feel abstract. PathFinder makes progress visible, emotional, and artistic — helping users *see* their growth.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Core Features
+- Goal → step breakdown
+- Interactive visual canvas
+- Black & white → color progress system
+- Replace visuals with personal images
+- Simple, calming, art-focused UI
 
-## Expanding the ESLint configuration
+## Built With
+- React
+- Vite
+- Tailwind CSS
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Hackathon
+Built for **InnovArt 2026: Art and Technology Hack Day**
