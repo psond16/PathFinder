@@ -1,34 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState } from "react";
+import DreamInput from "./components/DreamInput";
+import VisionBoard from "./components/VisionBoard";
+import { samplePath } from "./data/samplePaths";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [steps, setSteps] = useState(samplePath);
+
+  const toggleStep = (id) => {
+    setSteps((prev) =>
+      prev.map((step) =>
+        step.id === id
+          ? { ...step, completed: !step.completed }
+          : step
+      )
+    );
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col items-center justify-center px-6">
+      <DreamInput />
 
-export default App
+      <div className="w-full max-w-3xl">
+        <VisionBoard steps={steps} onToggle={toggleStep} />
+      </div>
+    </div>
+  );
+}
