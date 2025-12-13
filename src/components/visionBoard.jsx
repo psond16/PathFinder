@@ -1,23 +1,37 @@
-export default function VisionBoard({ steps, onToggle }) {
+export default function VisionBoard({ steps, currentStep, onStepClick }) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12">
-        {steps.map((step) => (
-          <div
-            key={step.id}
-            className={`p-6 rounded-xl border transition-all cursor-pointer
-              ${
-                step.completed
-                  ? "bg-white text-black border-green-500"
-                  : "bg-gray-200 text-gray-400 border-gray-300"
-              }`}
-            onClick={() => onToggle(step.id)}
-          >
-            <h3 className="font-semibold text-lg">{step.title}</h3>
-            <p className="mt-2 text-sm">
-              {step.completed ? "Completed ✓" : "Locked"}
-            </p>
-          </div>
-        ))}
+      <div className="space-y-4">
+        {steps.map((step, index) => {
+          const isCompleted = index < currentStep;
+          const isActive = index === currentStep;
+          const isLocked = index > currentStep;
+  
+          return (
+            <div
+              key={index}
+              onClick={() => !isLocked && onStepClick(index)}
+              className={`p-5 rounded-xl border transition-all cursor-pointer
+                ${
+                  isCompleted
+                    ? "bg-green-100 border-green-400 text-green-900"
+                    : isActive
+                    ? "bg-blue-100 border-blue-400 text-blue-900"
+                    : "bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed"
+                }
+              `}
+            >
+              <div className="flex justify-between items-center">
+                <span className="font-semibold">
+                  Step {index + 1}: {step}
+                </span>
+  
+                {isCompleted && <span>✓</span>}
+                {isLocked && <span>🔒</span>}
+                {isActive && <span>➡️</span>}
+              </div>
+            </div>
+          );
+        })}
       </div>
     );
   }
