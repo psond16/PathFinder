@@ -1,3 +1,4 @@
+import { generatePath } from "./lib/generatePath";
 import { useState } from "react";
 import DreamInput from "./components/DreamInput";
 import VisionBoard from "./components/VisionBoard";
