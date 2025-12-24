@@ -1,25 +1,31 @@
-import { generatePath } from "./lib/generatePath";
 import { useState } from "react";
-import DreamInput from "./components/DreamInput";
-import VisionBoard from "./components/VisionBoard";
+import DreamInput from "./components/dreamInput";
+import { generateMockPath } from "./lib/mockPath";
 
 export default function App() {
-  const [goal, setGoal] = useState("");
-  const [steps, setSteps] = useState([]);
+  const [pathData, setPathData] = useState(null);
 
-  const handleGenerate = (dream) => {
-    setGoal(dream);
-    // steps will be generated in Phase 6B
-  };
+  function handleGeneratePath(dreamText) {
+    console.log("handleGeneratePath fired:", dreamText);
+  
+    if (!dreamText.trim()) return;
+  
+    const result = generateMockPath(dreamText);
+    console.log("AI PATH RESULT:", result);
+  
+    setPathData(result);
+  }
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col items-center justify-center px-6">
-      <DreamInput onGenerate={handleGenerate} />
+      <DreamInput onGenerate={handleGeneratePath} />
 
-      {steps.length > 0 && (
-        <div className="w-full max-w-3xl">
-          <VisionBoard steps={steps} />
-        </div>
+      {/* TEMP DEBUG OUTPUT — WILL REMOVE LATER */}
+      {pathData && (
+        <pre className="mt-8 max-w-3xl w-full bg-white p-4 rounded-lg shadow text-left text-sm overflow-auto">
+          {JSON.stringify(pathData, null, 2)}
+        </pre>
       )}
     </div>
   );

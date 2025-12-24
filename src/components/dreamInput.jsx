@@ -5,6 +5,8 @@ export default function DreamInput({ onGenerate }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("SUBMIT CLICKED");
+
     if (!dream.trim()) return;
     onGenerate(dream);
     setDream("");
