@@ -1,52 +1,48 @@
-export default function VisionBoard({ steps, onUpdateNotes, onComplete }) {
-    return (
-      <div className="flex flex-col gap-6">
-        {steps.map((step) => (
-          <div
-            key={step.id}
-            className={`p-5 rounded-lg border ${
-              step.unlocked
-                ? "border-gray-700 bg-neutral-900"
-                : "border-gray-800 bg-neutral-900 opacity-40"
-            }`}
-          >
-            <h3 className="font-semibold text-lg mb-2">
-              Step {step.id + 1}: {step.title}
-            </h3>
-  
-            {!step.unlocked && (
-              <p className="text-sm text-gray-500">🔒 Locked</p>
-            )}
-  
-            {step.unlocked && (
-              <>
-                <textarea
-                  value={step.notes}
-                  onChange={(e) =>
-                    onUpdateNotes(step.id, e.target.value)
-                  }
-                  placeholder="Write your thoughts here..."
-                  className="w-full mt-3 p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none"
-                  rows={3}
-                />
-  
-                {!step.completed && (
-                  <button
-                    onClick={() => onComplete(step.id)}
-                    className="mt-3 px-4 py-2 rounded bg-blue-600 hover:bg-blue-700"
-                  >
-                    Mark as complete
-                  </button>
-                )}
-  
-                {step.completed && (
-                  <p className="mt-3 text-green-400">✓ Completed</p>
-                )}
-              </>
-            )}
-          </div>
-        ))}
-      </div>
-    );
-  }
-  
+import VisionTile from "./VisionTile";
+
+const quoteImages = [
+  "https://via.placeholder.com/300x200.png?text=Believe+in+Yourself",
+  "https://via.placeholder.com/300x200.png?text=Dream+Big",
+  "https://via.placeholder.com/300x200.png?text=Keep+Going",
+];
+
+function mergeStepsAndQuotes(steps) {
+  const merged = [];
+  steps.forEach((step, index) => {
+    merged.push({ ...step, type: "step" });
+
+    // Add a quote every 2 steps
+    if (index % 2 === 1) {
+      const quote =
+        quoteImages[Math.floor(Math.random() * quoteImages.length)];
+      merged.push({ type: "quote", image: quote, id: `q-${index}` });
+    }
+  });
+  return merged;
+}
+
+export default function VisionBoard({ steps, onTileClick }) {
+  const items = mergeStepsAndQuotes(steps);
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full mx-auto">
+      {items.map((item) =>
+        item.type === "quote" ? (
+          <img
+            key={item.id}
+            src={item.image}
+            alt="inspiration"
+            className="w-full h-48 object-cover rounded-lg shadow-lg"
+          />
+        ) : (
+          <VisionTile
+            key={item.id}
+            step={item}
+            locked={!item.unlocked}
+            onClick={() => onTileClick(item.id)}
+          />
+        )
+      )}
+    </div>
+  );
+}
