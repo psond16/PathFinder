@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DreamInput from "./components/dreamInput";
-import VisionBoard from "./components/VisionBoard";
-import VisionCollage from "./components/VisionCollage";
+import VisionBoard from "./components/visionBoard";
+import VisionCollage from "./components/visionCollage";
 import { generateMockPath } from "./lib/mockPath";
 
 export default function App() {
@@ -12,8 +12,22 @@ export default function App() {
     setPathData(generateMockPath([dreamText]));
   }
 
-  function handleTileClick(stepId) {
-    console.log("Tile clicked:", stepId);
+  function handleTaskToggle(stepId, taskId) {
+    setPathData((prev) => ({
+      ...prev,
+      steps: prev.steps.map((step) =>
+        step.id === stepId
+          ? {
+              ...step,
+              tasks: step.tasks.map((task) =>
+                task.id === taskId
+                  ? { ...task, completed: !task.completed }
+                  : task
+              ),
+            }
+          : step
+      ),
+    }));
   }
 
   return (
@@ -30,7 +44,10 @@ export default function App() {
 
       {pathData && (
         <div className="w-full max-w-6xl mt-12 px-6">
-          <VisionBoard steps={pathData.steps} onTileClick={handleTileClick} />
+          <VisionBoard
+            steps={pathData.steps}
+            onTaskToggle={handleTaskToggle}
+          />
         </div>
       )}
     </div>

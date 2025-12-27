@@ -40,7 +40,11 @@ export function generateMockPath(dreams) {
     const tasks = template
       .sort(() => 0.5 - Math.random())
       .slice(0, 3)
-      .map((task, tIdx) => ({ id: `task-${idx}-${tIdx}`, visionPrompt: task }));
+      .map((task, tIdx) => ({ 
+        id: `task-${idx}-${tIdx}`, 
+        visionPrompt: task,
+        completed: false
+      }));
 
     return {
       id: `goal-${idx}`,
