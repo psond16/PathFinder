@@ -1,12 +1,10 @@
-export default function VisionTile({ step, locked, onTaskToggle, onClick }) {
-  const goalCompleted = step.tasks.every(task => task.completed);
+export default function VisionTile({ step, locked, onTaskToggle }) {
+  const goalCompleted = step.tasks?.every(task => task.completed) ?? false;
 
   return (
     <div
       className={`relative rounded-xl shadow-lg transition-all duration-500 p-4 ${
-        goalCompleted
-          ? "bg-green-50 ring-2 ring-green-400"
-          : "bg-white"
+        goalCompleted ? "bg-green-50 ring-2 ring-green-400" : "bg-white"
       }`}
     >
       {/* Goal completed badge */}
@@ -20,7 +18,7 @@ export default function VisionTile({ step, locked, onTaskToggle, onClick }) {
       <p className="text-sm text-gray-500 mb-3">{step.duration}</p>
 
       <ul className="space-y-2">
-        {step.tasks.map(task => (
+        {step.tasks?.map((task) => (
           <li key={task.id} className="flex items-start gap-2">
             <input
               type="checkbox"
@@ -30,9 +28,7 @@ export default function VisionTile({ step, locked, onTaskToggle, onClick }) {
             />
             <span
               className={`text-sm transition ${
-                task.completed
-                  ? "line-through text-gray-400"
-                  : "text-gray-700"
+                task.completed ? "line-through text-gray-400" : "text-gray-700"
               }`}
             >
               {task.visionPrompt}
@@ -40,6 +36,13 @@ export default function VisionTile({ step, locked, onTaskToggle, onClick }) {
           </li>
         ))}
       </ul>
+
+      {/* LOCK OVERLAY ONLY VISUAL, DOESN’T BLOCK CHECKBOXES */}
+      {locked && !goalCompleted && (
+        <div className="absolute top-2 right-2 text-xl text-gray-400">
+          🔒
+        </div>
+      )}
     </div>
   );
 }
