@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
 import caseStudyContent from "../assets/vision/case-study-content.jpg";
 import contentInsta from "../assets/vision/content-insta.jpg";
 import designWebsite from "../assets/vision/design-website.webp";
@@ -16,19 +17,24 @@ import quote3 from "../assets/vision/quote3.jpg";
 import quote4 from "../assets/vision/quote4.jpg";
 import quote5 from "../assets/vision/quote5.png";
 
-// Map images to goals
 const goalImages = {
-  "Become confident": [speakToYourself, speakingClub],
-  "Build portfolio": [caseStudyContent, designWebsite, github],
-  "Learn guitar": [guitarChords, guitarRecord, learnGuitar],
-  "Become an influencer": [contentInsta, postInsta, recordVid],
-  "default": [quote1, quote2, quote3, quote4, quote5]
+  "Become confident": [speakToYourself, speakingClub, quote1],
+  "Build portfolio": [caseStudyContent, designWebsite, github, quote2],
+  "Learn guitar": [guitarChords, guitarRecord, learnGuitar, quote3, quote5],
+  "Become an influencer": [contentInsta, postInsta, recordVid, quote4],
+  default: [quote1, quote2, quote3, quote4, quote5],
 };
 
-export default function VisionCollage({ steps }) {
-  const [items, setItems] = useState(() =>
-    steps.flatMap((step, idx) =>
-      (goalImages[step.title] || goalImages["default"]).map((img, i) => ({
+export default function VisionCollage({ steps = [] }) {
+  const [items, setItems] = useState([]);
+  const initializedRef = useRef(false);
+
+  // 🔒 Initialize images ONLY once per goal set
+  useEffect(() => {
+    if (!steps.length || initializedRef.current) return;
+
+    const generated = steps.flatMap((step, idx) =>
+      (goalImages[step.title] || goalImages.default).map((img, i) => ({
         id: `${step.id}-img-${i}`,
         src: img,
         top: Math.random() * 65,
@@ -36,10 +42,13 @@ export default function VisionCollage({ steps }) {
         width: 120 + Math.random() * 140,
         rotate: -8 + Math.random() * 16,
         z: idx * 10 + i,
-        goalId: step.id
+        goalId: step.id,
       }))
-    )
-  );
+    );
+
+    setItems(generated);
+    initializedRef.current = true;
+  }, [steps.map((s) => s.id).join(",")]);
 
   const startDrag = (e, id) => {
     e.preventDefault();
@@ -47,6 +56,8 @@ export default function VisionCollage({ steps }) {
     const startY = e.clientY;
 
     const item = items.find((i) => i.id === id);
+    if (!item) return;
+
     const startTop = item.top;
     const startLeft = item.left;
 
@@ -57,7 +68,12 @@ export default function VisionCollage({ steps }) {
       setItems((prev) =>
         prev.map((it) =>
           it.id === id
-            ? { ...it, top: startTop + dy / 5, left: startLeft + dx / 5, z: 99 }
+            ? {
+                ...it,
+                top: startTop + dy / 5,
+                left: startLeft + dx / 5,
+                z: 999,
+              }
             : it
         )
       );
@@ -72,7 +88,6 @@ export default function VisionCollage({ steps }) {
     window.addEventListener("mouseup", onUp);
   };
 
-  // Determine which goals are fully completed
   const unlockedGoals = steps
     .filter((step) => step.tasks.every((t) => t.completed))
     .map((s) => s.id);
@@ -82,20 +97,20 @@ export default function VisionCollage({ steps }) {
       <div className="relative w-full max-w-5xl h-[420px] bg-[#f7f4ef] border-4 border-neutral-300 rounded-xl shadow-xl overflow-hidden">
         {items.map((item) => {
           const isUnlocked = unlockedGoals.includes(item.goalId);
+
           return (
             <div
               key={item.id}
-              onMouseDown={(e) => startDrag(e, item.id)} // Draggable always
+              onMouseDown={(e) => startDrag(e, item.id)}
               className="absolute cursor-grab active:cursor-grabbing transition-opacity duration-300"
               style={{
                 top: `${item.top}%`,
                 left: `${item.left}%`,
                 width: `${item.width}px`,
                 transform: `rotate(${item.rotate}deg)`,
-                zIndex: item.z
+                zIndex: item.z,
               }}
             >
-              {/* IMAGE */}
               <img
                 src={item.src}
                 alt="vision item"
@@ -105,7 +120,6 @@ export default function VisionCollage({ steps }) {
                 }`}
               />
 
-              {/* LOCK OVERLAY */}
               {!isUnlocked && (
                 <div className="absolute inset-0 bg-white/50 flex items-center justify-center rounded-md pointer-events-none">
                   <span className="text-3xl">🔒</span>

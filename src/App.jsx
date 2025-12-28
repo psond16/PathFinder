@@ -7,23 +7,9 @@ import { generateMockPath } from "./lib/mockPath.js";
 export default function App() {
   const [pathData, setPathData] = useState(null);
 
-  // Corrected: dreamText is a string, not an array
   function handleGeneratePath(dreamText) {
     if (!dreamText.trim()) return;
-
-    // If you want multiple default goals each as separate tile, use this:
-    const defaultGoals = [
-      "Become confident",
-      "Build portfolio",
-      "Learn guitar",
-      "Become an influencer"
-    ];
-
-    // For now, just use the single dreamText entered
-    // setPathData(generateMockPath([dreamText]));
-
-    // Or to always show the 4 default goals:
-    setPathData(generateMockPath(defaultGoals));
+    setPathData(generateMockPath(dreamText));
   }
 
   function handleTaskToggle(stepId, taskId) {
@@ -54,14 +40,7 @@ export default function App() {
         </p>
       )}
 
-      {pathData && (
-        <VisionCollage
-          steps={pathData.steps}
-          unlockedSteps={pathData.steps
-            .filter((step) => step.tasks.every(t => t.completed))
-            .map((step) => step.id)}
-        />
-      )}
+      {pathData && <VisionCollage steps={pathData.steps} />}
 
       {pathData?.steps?.length > 0 && (
         <div className="w-full max-w-6xl mt-12 px-6">
