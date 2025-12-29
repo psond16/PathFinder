@@ -12,8 +12,8 @@ export default function DreamInput({ onGenerate }) {
 
   return (
     <div className="w-full max-w-xl mt-12 text-center px-4">
-      <h1 className="text-4xl font-bold mb-4">PathFinder</h1>
-      <p className="text-gray-600 mb-6">
+      <h1 className="text-7xl font-bold mb-4 text-red-600">PathFinder</h1>
+      <p className="text-gray-100 mb-6">
         Describe a dream, goal, or future you want to work toward.
       </p>
 
