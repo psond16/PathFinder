@@ -21,5 +21,3 @@ Many people struggle to stay motivated because goals feel abstract. PathFinder m
 - Vite
 - Tailwind CSS
 
-## Hackathon
-Built for **InnovArt 2026: Art and Technology Hack Day**
